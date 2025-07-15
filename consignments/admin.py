@@ -64,4 +64,4 @@ class TransportDetailsAdmin(admin.ModelAdmin):
 
 @admin.register(FreightCharges)
 class FreightChargesAdmin(admin.ModelAdmin):
-    list_display = ('consignment', 'freight', 'total', 'gst')
+    list_display = ('consignment', 'freight', 'total')

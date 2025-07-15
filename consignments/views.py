@@ -9,6 +9,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
 
 class VendorViewSet(viewsets.ModelViewSet):
     serializer_class = VendorSerializer
@@ -58,3 +61,16 @@ class CustomEmailLoginView(APIView):
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         })
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def consignment_count(request):
+    """
+    Returns the count of consignments for the logged-in user.
+    """
+    try:
+        count = Consignment.objects.all().count()
+        return Response({'consignment_note_no': 5000+count}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
