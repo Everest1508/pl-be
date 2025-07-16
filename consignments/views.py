@@ -24,18 +24,13 @@ class VendorViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-
 class ConsignmentViewSet(viewsets.ModelViewSet):
     queryset = Consignment.objects.all()
     serializer_class = ConsignmentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Consignment.objects.filter(user=self.request.user)
-
-
-# views.py
-
+        return Consignment.objects.filter(user=self.request.user).select_related("consignor", "consignee")
 
 
 class CustomEmailLoginView(APIView):
