@@ -3,7 +3,7 @@ from .models import Vendor
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from .models import (
     Consignment, ConsignmentItem, ConsignmentItemSize,
-    TransportDetails, FreightCharges, Vendor
+    TransportDetails, FreightCharges, Vendor, LoadingPoint, UnloadingPoint
 )
 
 
@@ -37,11 +37,24 @@ class FreightChargesSerializer(serializers.ModelSerializer):
         exclude = ['consignment']
 
 
+class LoadingPointSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LoadingPoint
+        exclude = ['consignment']
+
+class UnloadingPointSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UnloadingPoint
+        exclude = ['consignment']
+
+
 class ConsignmentSerializer(WritableNestedModelSerializer):
     items = ConsignmentItemSerializer(many=True)
     sizes = ConsignmentItemSizeSerializer(many=True)
     transport_details = TransportDetailsSerializer()
     freight_charges = FreightChargesSerializer()
+    unloading_point = UnloadingPoint()
+    loading_point = LoadingPoint()
 
     class Meta:
         model = Consignment
@@ -54,6 +67,8 @@ class ConsignmentSerializer(WritableNestedModelSerializer):
         sizes_data = validated_data.pop('sizes')
         transport_data = validated_data.pop('transport_details')
         freight_data = validated_data.pop('freight_charges')
+        unloading_point_data = validated_data.pop('unloading_point')
+        loading_point_data = validated_data.pop('loading_point')
 
         consignment = Consignment.objects.create(user=user, **validated_data)
 
@@ -65,5 +80,7 @@ class ConsignmentSerializer(WritableNestedModelSerializer):
 
         TransportDetails.objects.create(consignment=consignment, **transport_data)
         FreightCharges.objects.create(consignment=consignment, **freight_data)
+        UnloadingPoint.objects.create(consignment=consignment, **unloading_point_data)
+        LoadingPoint.objects.create(consignment=consignment, **loading_point_data)
 
         return consignment
