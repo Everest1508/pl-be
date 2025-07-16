@@ -53,8 +53,8 @@ class ConsignmentSerializer(WritableNestedModelSerializer):
     sizes = ConsignmentItemSizeSerializer(many=True)
     transport_details = TransportDetailsSerializer()
     freight_charges = FreightChargesSerializer()
-    unloading_point = UnloadingPoint()
-    loading_point = LoadingPoint()
+    unloading_point = UnloadingPointSerializer()
+    loading_point = LoadingPointSerializer()
 
     class Meta:
         model = Consignment

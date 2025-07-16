@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     Vendor, Consignment, ConsignmentItem, ConsignmentItemSize,
-    TransportDetails, FreightCharges
+    TransportDetails, FreightCharges, LoadingPoint, UnloadingPoint
 )
 
 # Inline for ConsignmentItem
@@ -26,12 +26,22 @@ class FreightChargesInline(admin.StackedInline):
     extra = 0
     max_num = 1
 
+class LoadingPointInline(admin.StackedInline):
+    model = LoadingPoint
+    extra = 0
+    max_num = 1
+
+class UnloadingPointInline(admin.StackedInline):
+    model = UnloadingPoint
+    extra = 0
+    max_num = 1
+
 
 # Consignment Admin
 @admin.register(Consignment)
 class ConsignmentAdmin(admin.ModelAdmin):
     list_display = ('consignment_note_no', 'user', 'consignor', 'consignee', 'date')
-    inlines = [ConsignmentItemInline, ConsignmentItemSizeInline, TransportDetailsInline, FreightChargesInline]
+    inlines = [ConsignmentItemInline, ConsignmentItemSizeInline, TransportDetailsInline, FreightChargesInline, LoadingPointInline, UnloadingPointInline]
     search_fields = ['consignment_note_no', 'invoice_no']
     list_filter = ['date', 'user']
 
