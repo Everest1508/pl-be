@@ -57,6 +57,13 @@ class ConsignmentSerializer(WritableNestedModelSerializer):
     loading_point = LoadingPointSerializer()
     consignor = VendorSerializer(read_only=True)
     consignee = VendorSerializer(read_only=True)
+    consignor_id = serializers.PrimaryKeyRelatedField(
+        queryset=Vendor.objects.all(), write_only=True, source='consignor'
+    )
+    consignee_id = serializers.PrimaryKeyRelatedField(
+        queryset=Vendor.objects.all(), write_only=True, source='consignee'
+    )
+
 
     class Meta:
         model = Consignment
